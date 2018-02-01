@@ -22,17 +22,12 @@ class Draw(webapp2.RequestHandler):
         self.response.out.write(template.render(context))
 
     def post(self):
-        move = self.request.get('move')
-
-class MakeMove(webapp2.RequestHandler):
-    def get(self):
-        move = CDBMove(direction=Direction.UP)
+        direction = float(self.request.get('direction'))
+        move = CDBMove(direction=Direction(direction))
         move.put()
-        self.response.out.write('save move')
-
+        self.response.out.write('saved move')
 
 # request routing
 application = webapp2.WSGIApplication([
                                     ('/', Draw),
-                                    ('/make_move', MakeMove)
                                     ], debug=True)
