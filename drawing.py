@@ -22,7 +22,7 @@ class Draw(webapp2.RequestHandler):
         self.response.out.write(template.render(context))
 
     def post(self):
-        direction = float(self.request.get('direction'))
+        direction = int(self.request.get('direction'))
         move = CDBMove(direction=Direction(direction))
         move.put()
         self.response.out.write('saved move')
