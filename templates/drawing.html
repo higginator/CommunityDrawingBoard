@@ -13,7 +13,7 @@
 <script>
 
 var myGamePiece;
-var serverURL = "http://communitydrawingboard.appspot.com/make_move"
+var serverURL = "http://communitydrawingboard.appspot.com"
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 10, 120);
@@ -52,15 +52,16 @@ function component(width, height, color, x, y) {
     }
 }
 
-function httpGetAsync(theUrl, callback)
+function httpGetAsync(theUrl, params, callback)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.send(null);
+    xmlHttp.open("POST", theUrl, true); // true for asynchronous
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.send(params);
 }
 
 function updateGameArea() {
@@ -69,25 +70,33 @@ function updateGameArea() {
     myGamePiece.update();
 }
 
+
+
 function moveup() {
+    var params = "direction=1"
     myGamePiece.speedY -= 1;
-    httpGetAsync(serverURL)
-}
-
-function movedown() {
-    myGamePiece.speedY += 1;
-    httpGetAsync(serverURL)
-}
-
-function moveleft() {
-    myGamePiece.speedX -= 1;
-    httpGetAsync(serverURL)
+    httpGetAsync(serverURL, params)
 }
 
 function moveright() {
+  var params = "direction=2"
     myGamePiece.speedX += 1;
-    httpGetAsync(serverURL)
+    httpGetAsync(serverURL, params)
 }
+
+function movedown() {
+  var params = "direction=3"
+    myGamePiece.speedY += 1;
+    httpGetAsync(serverURL, params)
+}
+
+function moveleft() {
+  var params = "direction=4"
+    myGamePiece.speedX -= 1;
+    httpGetAsync(serverURL, params)
+}
+
+
 
 function clearmove() {
     myGamePiece.speedX = 0;
